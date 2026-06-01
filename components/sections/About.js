@@ -47,6 +47,11 @@ export default function About() {
       />
       <div className="section-scrim" />
       <div className="container">
+        <div className="about-head">
+          <span className="eyebrow reveal">Who I Am</span>
+          <h2 className="section-title reveal">About Me</h2>
+          <FlourishDivider className="divider" />
+        </div>
         <div className="about-grid reveal">
           {/* Stack of parchment sheets */}
           <div
@@ -128,7 +133,7 @@ function AboutPage({ education, current }) {
   return (
     <>
       <span className="eyebrow">The Tale So Far</span>
-      <h2 className="section-title paper-title">About Me</h2>
+      <h3 className="paper-title">Profile</h3>
       <FlourishDivider />
       <div className="about-body">
         {profile.about.map((para, i) => (
@@ -166,7 +171,7 @@ function ExperiencePage({ exp }) {
   return (
     <>
       <span className="eyebrow">The Campaign</span>
-      <h2 className="section-title paper-title">Experience</h2>
+      <h3 className="paper-title">Experience</h3>
       <FlourishDivider />
       {exp.map((e, i) => (
         <div key={i} className="exp-entry">
@@ -193,7 +198,7 @@ function InterestsPage({ interests }) {
   return (
     <>
       <span className="eyebrow">Beyond the Keep</span>
-      <h2 className="section-title paper-title">Interests</h2>
+      <h3 className="paper-title">Interests</h3>
       <FlourishDivider />
       <ul className="interest-list">
         {interests.map((it) => (

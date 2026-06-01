@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
 
 const ROMAN = ["I", "II", "III"];
+const PAPER_PADDING = 74; // top + bottom padding of a sheet (px)
 
 export default function About() {
   const [active, setActive] = useState(0);
+  const [stackH, setStackH] = useState(null);
+  const contentRefs = useRef([]);
   const { education } = profile;
   const current = profile.experience[0];
 
@@ -18,6 +21,22 @@ export default function About() {
   ];
 
   const go = (i) => setActive(Math.max(0, Math.min(pages.length - 1, i)));
+
+  // Size the stack to the active sheet's own content (full size, no scroll).
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = contentRefs.current[active];
+      if (el) setStackH(el.offsetHeight + PAPER_PADDING);
+    };
+    measure();
+    // re-measure once fonts settle and on resize
+    const t = setTimeout(measure, 250);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", measure);
+    };
+  }, [active]);
 
   return (
     <section id="about" className="section" data-nav="About">
@@ -30,7 +49,10 @@ export default function About() {
       <div className="container">
         <div className="about-grid reveal">
           {/* Stack of parchment sheets */}
-          <div className="paper-stack">
+          <div
+            className="paper-stack"
+            style={stackH ? { height: `${stackH}px` } : undefined}
+          >
             {pages.map((page, i) => {
               const diff = i - active;
               return (
@@ -51,7 +73,14 @@ export default function About() {
                   }}
                   aria-hidden={diff !== 0}
                 >
-                  <div className="paper-body">{page.render()}</div>
+                  <div className="paper-body">
+                    <div
+                      className="paper-content"
+                      ref={(el) => (contentRefs.current[i] = el)}
+                    >
+                      {page.render()}
+                    </div>
+                  </div>
                 </article>
               );
             })}

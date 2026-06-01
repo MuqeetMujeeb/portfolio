@@ -170,7 +170,7 @@ h2.section-title {
   max-width: var(--maxw);
   margin: 0 auto;
   padding: 6rem 2rem 3rem; /* top room for the fixed navbar */
-  transform: scale(0.8); /* shrink content 20% to fit fixed-height sections */
+  transform: scale(0.72); /* shrink content to fit fixed-height sections */
   transform-origin: center center;
 }
 
@@ -518,7 +518,7 @@ h2.section-title {
 
 /* ====================== HOME ====================== */
 #home .container {
-  transform: scale(0.8) translateX(-110px); /* anchor + nudge hero further left */
+  transform: scale(0.72) translateX(-110px); /* anchor + nudge hero further left */
   transform-origin: left center;
 }
 #home .section-scrim {
@@ -684,7 +684,8 @@ h2.section-title {
 /* ---- Flip-through paper stack ---- */
 .paper-stack {
   position: relative;
-  height: 600px;
+  height: 540px; /* fallback before JS measures the active sheet */
+  transition: height 0.55s cubic-bezier(0.7, 0, 0.2, 1);
 }
 .paper {
   position: absolute;

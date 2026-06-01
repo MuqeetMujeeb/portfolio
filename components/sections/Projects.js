@@ -2,6 +2,19 @@ import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
 
 export default function Projects() {
+  const columns = [
+    {
+      title: "SMARTnCODE Technologies",
+      items: profile.projects.filter(
+        (p) => p.context === "SMARTnCODE Technologies"
+      ),
+    },
+    {
+      title: "Personal Projects",
+      items: profile.projects.filter((p) => p.context === "Personal Project"),
+    },
+  ];
+
   return (
     <section id="projects" className="section" data-nav="Projects">
       <div
@@ -20,25 +33,35 @@ export default function Projects() {
             real-time voice agents.
           </p>
         </div>
-        <div className="projects-grid">
-          {profile.projects.map((proj) => (
-            <article key={proj.name} className="panel project-card reveal">
-              <span className="project-context">{proj.context}</span>
-              <h3>{proj.name}</h3>
-              <p className="project-blurb">{proj.blurb}</p>
-              <ul className="project-points">
-                {proj.points.map((pt, i) => (
-                  <li key={i}>{pt}</li>
-                ))}
-              </ul>
-              <div className="project-tech">
-                {proj.tech.map((t) => (
-                  <span key={t} className="tag">
-                    {t}
-                  </span>
+
+        <div className="projects-cols">
+          {columns.map((col) => (
+            <div
+              key={col.title}
+              className="panel panel-framed projects-box reveal"
+            >
+              <h3 className="projects-box-title">{col.title}</h3>
+              <div className="projects-box-list">
+                {col.items.map((proj) => (
+                  <article key={proj.name} className="project-entry">
+                    <h4>{proj.name}</h4>
+                    <p className="project-blurb">{proj.blurb}</p>
+                    <ul className="project-points">
+                      {proj.points.map((pt, i) => (
+                        <li key={i}>{pt}</li>
+                      ))}
+                    </ul>
+                    <div className="project-tech">
+                      {proj.tech.map((t) => (
+                        <span key={t} className="tag">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
                 ))}
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>

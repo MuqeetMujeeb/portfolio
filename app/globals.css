@@ -673,6 +673,213 @@ h2.section-title {
   margin-top: 0.2rem;
   font-size: 0.98rem;
 }
+.about-meta .value.subtle {
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+.about-grid {
+  max-width: 640px;
+}
+
+/* ---- Flip-through paper stack ---- */
+.paper-stack {
+  position: relative;
+  height: 600px;
+}
+.paper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2.3rem 2.4rem;
+  border-radius: 4px;
+  background-color: rgba(236, 224, 200, 0.96);
+  background-image: radial-gradient(
+      circle at 18% 12%,
+      rgba(168, 133, 47, 0.1),
+      transparent 55%
+    ),
+    radial-gradient(circle at 85% 88%, rgba(80, 58, 30, 0.12), transparent 55%);
+  border: 1px solid rgba(120, 85, 35, 0.4);
+  box-shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.75),
+    inset 0 0 60px rgba(120, 85, 35, 0.12);
+  transform-origin: center center;
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+.paper.is-active::before,
+.paper.is-active::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--gold-300);
+  opacity: 0.65;
+}
+.paper.is-active::before {
+  top: 12px;
+  left: 12px;
+  border-right: none;
+  border-bottom: none;
+}
+.paper.is-active::after {
+  bottom: 12px;
+  right: 12px;
+  border-left: none;
+  border-top: none;
+}
+.paper-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+}
+.paper-body::-webkit-scrollbar {
+  width: 7px;
+}
+.paper-body::-webkit-scrollbar-thumb {
+  background: rgba(120, 85, 35, 0.4);
+  border-radius: 4px;
+}
+.paper-title {
+  margin-top: 0.4rem;
+}
+
+.paper-nav {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.paper-arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-200);
+  background: rgba(20, 14, 8, 0.5);
+  color: var(--parch-100);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(3px);
+}
+.paper-arrow:hover:not(:disabled) {
+  background: var(--gold-200);
+  color: var(--stone-900);
+  transform: translateY(-2px);
+}
+.paper-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.paper-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+.paper-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(20, 14, 8, 0.4);
+  border: 1px solid rgba(231, 201, 122, 0.3);
+  border-radius: 3px;
+  cursor: pointer;
+  color: rgba(243, 232, 207, 0.82);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(3px);
+}
+.paper-tab:hover {
+  color: var(--parch-100);
+  border-color: var(--gold-200);
+}
+.paper-tab.active {
+  background: var(--gold-200);
+  color: var(--stone-900);
+  border-color: var(--gold-100);
+}
+.paper-tab-num {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+.paper-tab-label {
+  font-family: var(--font-title);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Experience page */
+.exp-entry {
+  margin-top: 0.4rem;
+}
+.exp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.exp-head h3 {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--ink-900);
+  letter-spacing: 0.04em;
+}
+.exp-period {
+  font-family: var(--font-title);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+  white-space: nowrap;
+}
+.exp-company {
+  font-style: italic;
+  color: var(--ink-600);
+  margin: 0.2rem 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* Interests page */
+.interest-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+.interest-item {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+.interest-rune {
+  color: var(--gold-300);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+.interest-label {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  color: var(--ink-900);
+}
+.interest-note {
+  color: var(--ink-600);
+  font-size: 0.95rem;
+}
 
 /* ====================== SKILLS ====================== */
 #skills .section-scrim {
@@ -760,36 +967,49 @@ h2.section-title {
 .projects-head .lead {
   color: rgba(243, 232, 207, 0.9);
 }
-.projects-grid {
+/* Two side-by-side boxes, one per project category */
+.projects-cols {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem;
+  align-items: stretch;
 }
-.project-card {
-  padding: 1.6rem 1.8rem;
+.projects-box {
+  padding: 1.8rem 1.9rem;
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.8),
-    inset 0 0 60px rgba(120, 85, 35, 0.18);
-}
-.project-context {
-  font-family: var(--font-title);
-  font-size: 0.6rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold-300);
-}
-.project-card h3 {
+.projects-box-title {
   font-family: var(--font-title);
   font-weight: 800;
-  letter-spacing: 0.06em;
-  font-size: 1.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 1.05rem;
+  text-align: center;
   color: var(--ink-900);
-  margin-top: 0.4rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(120, 85, 35, 0.4);
+}
+.projects-box-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.project-entry {
+  display: flex;
+  flex-direction: column;
+}
+.project-entry + .project-entry {
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(120, 85, 35, 0.28);
+}
+.project-entry h4 {
+  font-family: var(--font-title);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-size: 1.35rem;
+  color: var(--ink-900);
 }
 .project-blurb {
   margin-top: 0.7rem;

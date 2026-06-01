@@ -44,14 +44,14 @@ export default function Navbar({ active, scrolled, onJump, onSummon }) {
           ))}
         </nav>
 
-        {/* Interactive CTA — summons the AI herald */}
+        {/* Interactive CTA — summons the AI herald
         <button className="nav-summon" onClick={onSummon}>
           <span className="nav-summon-ico">
             <Icon.chat width="18" height="18" />
           </span>
           <span className="nav-summon-text">Ask the Herald</span>
           <span className="nav-summon-spark" />
-        </button>
+        </button> */}
 
         {/* Mobile toggle */}
         <button

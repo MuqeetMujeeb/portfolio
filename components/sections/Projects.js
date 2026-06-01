@@ -1,7 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
+import Modal from "@/components/Modal";
 
 export default function Projects() {
+  const [open, setOpen] = useState(null); // selected project object
+
   const columns = [
     {
       title: "SMARTnCODE Technologies",
@@ -43,7 +49,23 @@ export default function Projects() {
               <h3 className="projects-box-title">{col.title}</h3>
               <div className="projects-box-list">
                 {col.items.map((proj) => (
-                  <article key={proj.name} className="project-entry">
+                  <article
+                    key={proj.name}
+                    className="project-entry"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Expand ${proj.name}`}
+                    onClick={() => setOpen(proj)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpen(proj);
+                      }
+                    }}
+                  >
+                    <span className="project-expand" aria-hidden="true">
+                      ⤢
+                    </span>
                     <h4>{proj.name}</h4>
                     <p className="project-blurb">{proj.blurb}</p>
                     <ul className="project-points">
@@ -65,6 +87,29 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      <Modal open={!!open} onClose={() => setOpen(null)} label={open?.name}>
+        {open && (
+          <>
+            <span className="project-context">{open.context}</span>
+            <h3 className="proj-modal-title">{open.name}</h3>
+            <FlourishDivider />
+            <p className="project-blurb">{open.blurb}</p>
+            <ul className="project-points">
+              {open.points.map((pt, i) => (
+                <li key={i}>{pt}</li>
+              ))}
+            </ul>
+            <div className="project-tech">
+              {open.tech.map((t) => (
+                <span key={t} className="tag">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+      </Modal>
     </section>
   );
 }

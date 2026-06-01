@@ -3,6 +3,7 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
+import Modal from "@/components/Modal";
 
 const ROMAN = ["I", "II", "III"];
 const PAPER_PADDING = 74; // top + bottom padding of a sheet (px)
@@ -10,6 +11,7 @@ const PAPER_PADDING = 74; // top + bottom padding of a sheet (px)
 export default function About() {
   const [active, setActive] = useState(0);
   const [stackH, setStackH] = useState(null);
+  const [expanded, setExpanded] = useState(false);
   const contentRefs = useRef([]);
   const { education } = profile;
   const current = profile.experience[0];
@@ -64,9 +66,10 @@ export default function About() {
                 <article
                   key={i}
                   className={`paper ${diff === 0 ? "is-active" : diff < 0 ? "is-read" : "is-stacked"}`}
+                  aria-hidden={diff !== 0}
+                  onClick={diff === 0 ? () => setExpanded(true) : undefined}
                   style={{
                     zIndex: 10 - Math.abs(diff),
-                    // upcoming sheets peek out behind the active one
                     transform:
                       diff <= 0
                         ? diff === 0
@@ -75,9 +78,14 @@ export default function About() {
                         : `translate(${diff * 7}px, ${diff * 12}px) rotate(${diff * 1.6}deg) scale(${1 - diff * 0.035})`,
                     opacity: diff < 0 ? 0 : diff > 2 ? 0 : 1,
                     pointerEvents: diff === 0 ? "auto" : "none",
+                    cursor: diff === 0 ? "pointer" : "default",
                   }}
-                  aria-hidden={diff !== 0}
                 >
+                  {diff === 0 && (
+                    <span className="paper-expand" aria-hidden="true">
+                      ⤢
+                    </span>
+                  )}
                   <div className="paper-body">
                     <div
                       className="paper-content"
@@ -122,6 +130,14 @@ export default function About() {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={expanded}
+        onClose={() => setExpanded(false)}
+        label={pages[active].tab}
+      >
+        <div className="about-modal-content">{pages[active].render()}</div>
+      </Modal>
     </section>
   );
 }

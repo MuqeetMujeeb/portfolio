@@ -1352,47 +1352,67 @@ h2.section-title {
 }
 .connect-links {
   margin-top: 2.6rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 360px));
   gap: 1.1rem;
   justify-content: center;
-  flex-wrap: wrap;
 }
+/* Long horizontal buttons: icon left, label top-right, address bottom-right */
 .connect-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.45rem;
-  width: 230px;
-  padding: 1.5rem 1.2rem;
+  gap: 1.1rem;
+  width: 100%;
+  padding: 1rem 1.4rem;
+  text-align: left;
   border: 1px solid rgba(231, 201, 122, 0.35);
-  border-radius: 4px;
-  background: rgba(20, 16, 28, 0.45);
+  border-radius: 6px;
+  background: rgba(20, 16, 28, 0.5);
   backdrop-filter: blur(4px);
-  transition: all 0.35s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease,
+    background 0.3s ease, box-shadow 0.3s ease;
 }
 .connect-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   border-color: var(--gold-100);
-  background: rgba(40, 34, 20, 0.55);
+  background: rgba(40, 34, 20, 0.6);
   box-shadow: 0 20px 50px -20px rgba(231, 201, 122, 0.5);
 }
 .connect-card .ico {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(231, 201, 122, 0.4);
+  border-radius: 50%;
   color: var(--gold-100);
+}
+.connect-card .ct-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0; /* enables ellipsis */
 }
 .connect-card .ct-label {
   font-family: var(--font-title);
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: rgba(243, 232, 207, 0.9);
 }
 .connect-card .ct-value {
   font-family: var(--font-body);
-  font-size: 0.82rem;
-  color: rgba(243, 232, 207, 0.72);
+  font-size: 1.05rem; /* ~13px after the page zoom (>= 12) */
+  font-weight: 500;
+  color: rgba(245, 236, 214, 0.97);
   letter-spacing: 0.01em;
-  line-height: 1.3;
-  text-align: center;
-  word-break: break-word;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
 }
 .connect-card:hover .ct-value {
   color: var(--gold-100);
@@ -1900,6 +1920,7 @@ h2.section-title {
   .sidenav { right: 12px; }
   .about-grid { margin-left: 0; }
   .ribbon-nav { display: none; } /* no side room on phones — use the tabs */
+  .connect-links { grid-template-columns: minmax(0, 360px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

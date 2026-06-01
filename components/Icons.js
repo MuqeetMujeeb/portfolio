@@ -58,4 +58,11 @@ export const Icon = {
       <path d="M3 11l18-8-8 18-2.5-7.5L3 11z" />
     </svg>
   ),
+  resume: (p) => (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" {...p}>
+      <path d="M6 2.5h7l5 5v14a0 0 0 0 1 0 0H6a0 0 0 0 1 0 0V2.5z" />
+      <path d="M13 2.5V8h5" />
+      <path d="M8.5 12.5h7M8.5 15.5h7M8.5 18.5h4" strokeLinecap="round" />
+    </svg>
+  ),
 };

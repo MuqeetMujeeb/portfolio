@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
+import HomeSocials from "@/components/HomeSocials";
 
 export default function Home() {
   const [first, ...rest] = profile.name.split(" ");
@@ -23,14 +24,7 @@ export default function Home() {
           <FlourishDivider />
           <p className="home-title reveal">{profile.title}</p>
           <p className="home-tagline reveal">{profile.tagline}</p>
-          <div className="home-cta reveal">
-            <Link className="btn btn-primary" href="/projects">
-              View My Works
-            </Link>
-            <Link className="btn btn-ghost" href="/connect">
-              Make Contact
-            </Link>
-          </div>
+          <HomeSocials />
         </div>
       </div>
       <Link href="/about" className="scroll-hint">

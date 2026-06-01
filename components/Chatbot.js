@@ -13,7 +13,7 @@ const SUGGESTIONS = [
 
 const GREETING = {
   role: "bot",
-  text: `Greetings, traveler. I'm ${profile.shortName}'s herald — ask me anything about his work, projects, or skills.`,
+  text: `Greetings. I'm ${profile.shortName}'s assistant — ask me anything about his work, projects, or skills.`,
 };
 
 export default function Chatbot({ open, onOpen, onClose }) {
@@ -85,7 +85,7 @@ export default function Chatbot({ open, onOpen, onClose }) {
       <button
         className="chat-fab"
         onClick={onOpen}
-        aria-label="Open chat with Muqeet's AI herald"
+        aria-label="Open chat with Muqeet's AI assistant"
       >
         <Icon.chat />
       </button>
@@ -93,11 +93,11 @@ export default function Chatbot({ open, onOpen, onClose }) {
   }
 
   return (
-    <div className="chat-window" role="dialog" aria-label="Chat with Muqeet's AI herald">
+    <div className="chat-window" role="dialog" aria-label="Chat with Muqeet's AI assistant">
       <div className="chat-header">
         <div className="seal">{profile.shortName[0]}</div>
         <div>
-          <div className="ch-title">Ask the Herald</div>
+          <div className="ch-title">Ask the assistant</div>
           <div className="ch-sub">{profile.shortName}&apos;s AI assistant</div>
         </div>
         <button className="ch-close" onClick={onClose} aria-label="Close chat">
@@ -112,7 +112,7 @@ export default function Chatbot({ open, onOpen, onClose }) {
           </div>
         ))}
         {busy && (
-          <div className="msg bot typing" aria-label="Herald is typing">
+          <div className="msg bot typing" aria-label="assistant is typing">
             <span />
             <span />
             <span />

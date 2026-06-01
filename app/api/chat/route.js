@@ -3,7 +3,7 @@ import { buildSystemPrompt, profile } from "@/lib/profile";
 
 export const runtime = "nodejs";
 
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
 export async function POST(req) {
   let history = [];
@@ -24,7 +24,7 @@ export async function POST(req) {
   if (!apiKey || apiKey === "your_key_here") {
     return Response.json({
       reply:
-        `(Demo mode — no AI key set yet.) I'm ${profile.shortName}'s herald. ` +
+        `(Demo mode — no AI key set yet.) I'm ${profile.shortName}'s assistant. ` +
         `Muqeet is an AI Engineer in ${profile.location} working on LLMs, RAG ` +
         `pipelines and voice agents. Add a free GEMINI_API_KEY in .env.local to ` +
         `unlock full conversations. Reach him at ${profile.contact.email}.`,

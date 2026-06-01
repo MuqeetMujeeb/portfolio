@@ -89,18 +89,24 @@ export default function About() {
                 </article>
               );
             })}
-          </div>
 
-          {/* Flip controls */}
-          <div className="paper-nav reveal">
+            {/* Ribbon navigation on either side of the sheets */}
             <button
-              className="paper-arrow"
+              className="ribbon-nav prev"
               onClick={() => go(active - 1)}
               disabled={active === 0}
               aria-label="Previous page"
-            >
-              ‹
-            </button>
+            />
+            <button
+              className="ribbon-nav next"
+              onClick={() => go(active + 1)}
+              disabled={active === pages.length - 1}
+              aria-label="Next page"
+            />
+          </div>
+
+          {/* Page tabs */}
+          <div className="paper-nav reveal">
             <div className="paper-tabs">
               {pages.map((p, i) => (
                 <button
@@ -113,14 +119,6 @@ export default function About() {
                 </button>
               ))}
             </div>
-            <button
-              className="paper-arrow"
-              onClick={() => go(active + 1)}
-              disabled={active === pages.length - 1}
-              aria-label="Next page"
-            >
-              ›
-            </button>
           </div>
         </div>
       </div>

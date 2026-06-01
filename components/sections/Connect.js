@@ -3,11 +3,34 @@ import { FlourishDivider, Icon } from "@/components/Icons";
 
 export default function Connect() {
   const { contact } = profile;
+  const strip = (url) => url.replace(/^https?:\/\//, "");
   const links = [
-    { label: "Email", href: `mailto:${contact.email}`, icon: Icon.email },
-    { label: "GitHub", href: contact.github, icon: Icon.github, ext: true },
-    { label: "LinkedIn", href: contact.linkedin, icon: Icon.linkedin, ext: true },
-    { label: "Call", href: `tel:${contact.phone.replace(/\s/g, "")}`, icon: Icon.phone },
+    {
+      label: "Email",
+      value: contact.email,
+      href: `mailto:${contact.email}`,
+      icon: Icon.email,
+    },
+    {
+      label: "GitHub",
+      value: strip(contact.github),
+      href: contact.github,
+      icon: Icon.github,
+      ext: true,
+    },
+    {
+      label: "LinkedIn",
+      value: strip(contact.linkedin),
+      href: contact.linkedin,
+      icon: Icon.linkedin,
+      ext: true,
+    },
+    {
+      label: "Call",
+      value: contact.phone,
+      href: `tel:${contact.phone.replace(/\s/g, "")}`,
+      icon: Icon.phone,
+    },
   ];
   return (
     <section id="connect" className="section" data-nav="Connect">
@@ -42,6 +65,7 @@ export default function Connect() {
                     <IconComp />
                   </span>
                   <span className="ct-label">{l.label}</span>
+                  <span className="ct-value">{l.value}</span>
                 </a>
               );
             })}

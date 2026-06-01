@@ -1,7 +1,7 @@
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
 
-const runes = ["⚔", "✦", "⛭", "♜"];
+const runes = ["✦", "⚔", "⛭", "❮❯"];
 
 export default function Skills() {
   return (
@@ -15,25 +15,45 @@ export default function Skills() {
       <div className="container">
         <div className="skills-head">
           <span className="eyebrow reveal">The Armory</span>
-          <h2 className="section-title reveal">Skills & Craft</h2>
+          <h2 className="section-title reveal">Skills &amp; Craft</h2>
           <FlourishDivider className="divider" />
           <p className="lead reveal">
-            The tools and disciplines I wield to forge reliable, production-grade
-            AI systems.
+            The tools, frameworks, and technologies I build with.
           </p>
+          <div className="skill-legend reveal">
+            <span className="legend-item">
+              <i className="legend-dot core" /> Core expertise
+            </span>
+            <span className="legend-item">
+              <i className="legend-dot familiar" /> Familiar
+            </span>
+          </div>
         </div>
+
         <div className="skills-grid">
-          {profile.skillGroups.map((group, i) => (
-            <div key={group.label} className="panel skill-card reveal">
+          {profile.skillDomains.map((domain, i) => (
+            <div key={domain.title} className="panel skill-card reveal">
               <h3>
                 <span className="rune">{runes[i % runes.length]}</span>
-                {group.label}
+                {domain.title}
               </h3>
-              <div className="chip-row">
-                {group.skills.map((s) => (
-                  <span key={s} className="chip">
-                    {s}
-                  </span>
+              <div className="skill-rows">
+                {domain.rows.map((row) => (
+                  <div key={row.label} className="skill-row">
+                    <span className="skill-row-label">{row.label}</span>
+                    <div className="skill-row-chips">
+                      {row.c.map((s) => (
+                        <span key={s} className="chip core">
+                          {s}
+                        </span>
+                      ))}
+                      {row.f.map((s) => (
+                        <span key={s} className="chip familiar">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

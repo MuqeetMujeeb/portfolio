@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
 
@@ -23,19 +24,19 @@ export default function Home() {
           <p className="home-title reveal">{profile.title}</p>
           <p className="home-tagline reveal">{profile.tagline}</p>
           <div className="home-cta reveal">
-            <a className="btn btn-primary" href="#projects">
+            <Link className="btn btn-primary" href="/projects">
               View My Works
-            </a>
-            <a className="btn btn-ghost" href="#connect">
+            </Link>
+            <Link className="btn btn-ghost" href="/connect">
               Make Contact
-            </a>
+            </Link>
           </div>
         </div>
       </div>
-      <div className="scroll-hint">
-        Scroll to journey on
+      <Link href="/about" className="scroll-hint">
+        Begin the Tale
         <span className="chev" />
-      </div>
+      </Link>
     </section>
   );
 }

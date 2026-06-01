@@ -46,8 +46,8 @@ export default function Connect() {
           <h2 className="section-title reveal">Questions & Connect</h2>
           <FlourishDivider className="divider" style={{ margin: "1.4rem auto" }} />
           <p className="lead reveal">
-            Have a question, a quest, or a collaboration in mind? Cross the
-            bridge — or ask my AI herald in the corner anything about my work.
+            Have a question, or a collaboration in mind? Cross the
+            bridge — or ask my AI assistant in the corner anything about my work.
           </p>
           <div className="connect-links">
             {links.map((l) => {

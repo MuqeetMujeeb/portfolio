@@ -220,6 +220,24 @@ h2.section-title {
   transform: translateY(38px);
 }
 
+/* Per-route fade-in (see app/template.js) */
+.route-fade {
+  animation: routeFade 0.5s ease;
+}
+@keyframes routeFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-fade {
+    animation: none;
+  }
+}
+
 /* ====================== Side navigation (dots) ================== */
 .sidenav {
   position: fixed;

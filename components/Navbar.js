@@ -1,46 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { profile } from "@/lib/profile";
-import { Icon } from "@/components/Icons";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "connect", label: "Connect" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/skills", label: "Skills" },
+  { href: "/projects", label: "Projects" },
+  { href: "/connect", label: "Connect" },
 ];
 
-export default function Navbar({ active, scrolled, onJump, onSummon }) {
+export default function Navbar({ onSummon }) {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  function go(id) {
-    setMenuOpen(false);
-    onJump(id);
-  }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (href) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header className={`navbar ${scrolled ? "is-scrolled" : ""}`}>
       <div className="nav-inner">
-        {/* Brand / crest
-        <button className="nav-brand" onClick={() => go("home")} aria-label="Back to top">
-          <span className="nav-crest">{profile.shortName[0]}</span>
-          <span className="nav-brand-text">{profile.shortName}</span>
-        </button> */}
-
         {/* Desktop links with an animated active indicator */}
         <nav className="nav-links" aria-label="Primary">
           {LINKS.map((l) => (
-            <button
-              key={l.id}
-              className={`nav-link ${active === l.id ? "active" : ""}`}
-              aria-current={active === l.id ? "true" : undefined}
-              onClick={() => go(l.id)}
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`nav-link ${isActive(l.href) ? "active" : ""}`}
+              aria-current={isActive(l.href) ? "page" : undefined}
             >
               <span className="nav-link-label">{l.label}</span>
               <span className="nav-link-underline" />
-            </button>
+            </Link>
           ))}
         </nav>
 
@@ -69,13 +70,14 @@ export default function Navbar({ active, scrolled, onJump, onSummon }) {
       {/* Mobile overlay menu */}
       <div className={`nav-overlay ${menuOpen ? "open" : ""}`}>
         {LINKS.map((l) => (
-          <button
-            key={l.id}
-            className={`nav-overlay-link ${active === l.id ? "active" : ""}`}
-            onClick={() => go(l.id)}
+          <Link
+            key={l.href}
+            href={l.href}
+            className={`nav-overlay-link ${isActive(l.href) ? "active" : ""}`}
+            onClick={() => setMenuOpen(false)}
           >
             {l.label}
-          </button>
+          </Link>
         ))}
         <button
           className="nav-overlay-link summon"

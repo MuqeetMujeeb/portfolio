@@ -575,6 +575,19 @@ h2.section-title {
   color: var(--gold-200);
   margin-top: 1.4rem;
 }
+.rotating-title {
+  display: inline-block;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.rotating-title.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.rotating-title.out {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
 .home-tagline {
   margin-top: 1.8rem;
   font-size: clamp(1.1rem, 1.9vw, 1.4rem);

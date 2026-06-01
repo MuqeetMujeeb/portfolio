@@ -2,6 +2,7 @@ import Link from "next/link";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
 import HomeSocials from "@/components/HomeSocials";
+import RotatingTitle from "@/components/RotatingTitle";
 
 export default function Home() {
   const [first, ...rest] = profile.name.split(" ");
@@ -22,7 +23,9 @@ export default function Home() {
             <span className="accent">{last}</span>
           </h1>
           <FlourishDivider />
-          <p className="home-title reveal">{profile.title}</p>
+          <p className="home-title reveal">
+            <RotatingTitle roles={profile.roles} />
+          </p>
           <p className="home-tagline reveal">{profile.tagline}</p>
           <HomeSocials />
         </div>

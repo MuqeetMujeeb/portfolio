@@ -7,26 +7,35 @@ import Home from "@/components/sections/Home";
 
 export default function HomePage() {
   const [ready, setReady] = useState(false);
-  const [entered, setEntered] = useState(false);
+  const [showGate, setShowGate] = useState(false);
 
   // Show the castle gate once per browsing session (not on in-app navigation).
   useEffect(() => {
     const done = sessionStorage.getItem("entered") === "1";
-    setEntered(done);
     setReady(true);
-    if (!done) document.body.classList.add("gate-locked");
+    if (!done) {
+      setShowGate(true);
+      document.body.classList.add("gate-locked");
+    }
     return () => document.body.classList.remove("gate-locked");
   }, []);
 
+  // Called at the light's peak — reveal & unlock the home page behind the gate.
   function handleEnter() {
     sessionStorage.setItem("entered", "1");
     document.body.classList.remove("gate-locked");
-    setEntered(true);
+  }
+
+  // Called after the gate has fully dissolved into the home page.
+  function handleFinish() {
+    setShowGate(false);
   }
 
   return (
     <>
-      {ready && !entered && <GateLoader onEnter={handleEnter} />}
+      {ready && showGate && (
+        <GateLoader onEnter={handleEnter} onFinish={handleFinish} />
+      )}
       <PageFx>
         <Home />
       </PageFx>

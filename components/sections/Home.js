@@ -9,11 +9,24 @@ export default function Home() {
   const last = rest.join(" ");
   return (
     <section id="home" className="section" data-nav="Home">
-      <div
+      {/* Image background — uncomment to use a still image instead of the video */}
+      {/* <div
         className="section-bg"
         style={{ backgroundImage: "url('/images/home.png')" }}
         data-parallax
-      />
+      /> */}
+      <div className="section-bg" data-parallax>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/images/home.png"
+          className="bg-video"
+        >
+          <source src="/images/homee.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div className="section-scrim" />
       <div className="container">
         <div className="home-inner">

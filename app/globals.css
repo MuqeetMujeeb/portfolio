@@ -143,6 +143,15 @@ h2.section-title {
   will-change: transform;
 }
 
+/* Video background fills the section like a cover image */
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .section-scrim {
   position: absolute;
   inset: 0;
@@ -1538,6 +1547,52 @@ h2.section-title {
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 0 rgba(231, 201, 122, 0); }
   50% { box-shadow: 0 0 30px rgba(231, 201, 122, 0.45); }
+}
+
+/* ====================== VIDEO GATE ====================== */
+.video-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #000;
+  overflow: hidden;
+  transition: opacity 0.45s ease;
+}
+.video-gate.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+.video-gate-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* white "light" overlay that intensifies as the doors open */
+.video-gate-light {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s linear;
+}
+.video-gate .gate-enter {
+  z-index: 5;
+}
+/* a soft scrim behind the intro text so it reads over the video */
+.video-gate .gate-enter::before {
+  content: "";
+  position: absolute;
+  inset: -60% -120%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.55),
+    transparent 70%
+  );
 }
 
 /* ====================== CHATBOT ====================== */

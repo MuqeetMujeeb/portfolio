@@ -36,11 +36,24 @@ export default function Connect() {
   ];
   return (
     <section id="connect" className="section" data-nav="Connect">
-      <div
+      {/* Image background — uncomment to use a still image instead of the video */}
+      {/* <div
         className="section-bg"
         style={{ backgroundImage: "url('/images/connect.png')" }}
         data-parallax
-      />
+      /> */}
+      <div className="section-bg" data-parallax>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/images/connect.png"
+          className="bg-video"
+        >
+          <source src="/images/connectt.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div className="section-scrim" />
       <div className="container">
         <div className="connect-inner">

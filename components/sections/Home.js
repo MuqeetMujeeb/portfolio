@@ -12,7 +12,7 @@ export default function Home() {
       {/* Image background — uncomment to use a still image instead of the video */}
       {/* <div
         className="section-bg"
-        style={{ backgroundImage: "url('/images/home.png')" }}
+        style={{ backgroundImage: "url('/images/home.webp')" }}
         data-parallax
       /> */}
       <div className="section-bg" data-parallax>
@@ -21,7 +21,7 @@ export default function Home() {
           loop
           muted
           playsInline
-          poster="/images/home.png"
+          poster="/images/home.webp"
           className="bg-video"
         >
           <source src="/images/homee.mp4" type="video/mp4" />

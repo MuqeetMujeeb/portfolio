@@ -49,7 +49,7 @@ export default function Skills() {
     <section id="skills" className="section" data-nav="Skills">
       <div
         className="section-bg"
-        style={{ backgroundImage: "url('/images/skills.png')" }}
+        style={{ backgroundImage: "url('/images/skills.webp')" }}
         data-parallax
       />
       <div className="section-scrim" />

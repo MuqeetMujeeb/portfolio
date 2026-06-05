@@ -25,7 +25,7 @@ export default function Projects() {
     <section id="projects" className="section" data-nav="Projects">
       <div
         className="section-bg"
-        style={{ backgroundImage: "url('/images/projects.png')" }}
+        style={{ backgroundImage: "url('/images/projects.webp')" }}
         data-parallax
       />
       <div className="section-scrim" />

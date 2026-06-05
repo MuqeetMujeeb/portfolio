@@ -39,7 +39,7 @@ export default function Connect() {
       {/* Image background — uncomment to use a still image instead of the video */}
       {/* <div
         className="section-bg"
-        style={{ backgroundImage: "url('/images/connect.png')" }}
+        style={{ backgroundImage: "url('/images/connect.webp')" }}
         data-parallax
       /> */}
       <div className="section-bg" data-parallax>
@@ -48,7 +48,7 @@ export default function Connect() {
           loop
           muted
           playsInline
-          poster="/images/connect.png"
+          poster="/images/connect.webp"
           className="bg-video"
         >
           <source src="/images/connectt.mp4" type="video/mp4" />

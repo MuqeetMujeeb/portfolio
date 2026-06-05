@@ -44,7 +44,7 @@ export default function About() {
     <section id="about" className="section" data-nav="About">
       <div
         className="section-bg"
-        style={{ backgroundImage: "url('/images/about.png')" }}
+        style={{ backgroundImage: "url('/images/about.webp')" }}
         data-parallax
       />
       <div className="section-scrim" />

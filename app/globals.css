@@ -1556,7 +1556,8 @@ h2.section-title {
   z-index: 200;
   background: #000;
   overflow: hidden;
-  transition: opacity 0.45s ease;
+  /* gentle cross-dissolve into the home page (no harsh flash) */
+  transition: opacity 0.9s ease;
 }
 .video-gate.exiting {
   opacity: 0;
@@ -1569,18 +1570,13 @@ h2.section-title {
   height: 100%;
   object-fit: cover;
 }
-/* white "light" overlay that intensifies as the doors open */
-.video-gate-light {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: #fff;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.12s linear;
-}
 .video-gate .gate-enter {
   z-index: 5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .video-gate {
+    transition: opacity 0.25s ease;
+  }
 }
 /* a soft scrim behind the intro text so it reads over the video */
 .video-gate .gate-enter::before {

@@ -2,6 +2,8 @@ import { Cinzel, Cinzel_Decorative, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/profile";
 import SiteChrome from "@/components/SiteChrome";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -48,6 +50,8 @@ export default function RootLayout({ children }) {
         className={`${cinzel.variable} ${cinzelDecorative.variable} ${garamond.variable}`}
       >
         <SiteChrome>{children}</SiteChrome>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

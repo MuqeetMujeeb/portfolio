@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import GateLoader from "@/components/GateLoader";
 import PageFx from "@/components/PageFx";
 import Home from "@/components/sections/Home";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function HomePage() {
   const [ready, setReady] = useState(false);

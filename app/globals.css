@@ -910,6 +910,11 @@ h2.section-title {
 .exp-entry {
   margin-top: 0.4rem;
 }
+.exp-entry + .exp-entry {
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(120, 85, 35, 0.25);
+}
 .exp-head {
   display: flex;
   justify-content: space-between;

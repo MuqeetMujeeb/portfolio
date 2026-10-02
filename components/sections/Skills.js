@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { profile } from "@/lib/profile";
 import { FlourishDivider } from "@/components/Icons";
+import Modal from "@/components/Modal";
 
 const runes = ["✦", "⚔", "⛭", "❮❯"];
 
@@ -103,44 +103,19 @@ export default function Skills() {
 }
 
 function SkillModal({ domain, rune, onClose }) {
-  useEffect(() => {
-    if (!domain) return;
-    const onKey = (e) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [domain, onClose]);
-
-  if (!domain || typeof document === "undefined") return null;
-
-  return createPortal(
-    <div
-      className="sk-overlay"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={domain.title}
-    >
-      <div
-        className="panel panel-framed sk-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="sk-close" onClick={onClose} aria-label="Close">
-          ×
-        </button>
-        <h3 className="sk-modal-title">
-          <span className="rune">{rune}</span>
-          {domain.title}
-        </h3>
-        <FlourishDivider />
-        <SkillRows domain={domain} />
-        <Legend />
-      </div>
-    </div>,
-    document.body
+  return (
+    <Modal open={!!domain} onClose={onClose} label={domain?.title}>
+      {domain && (
+        <>
+          <h3 className="sk-modal-title">
+            <span className="rune">{rune}</span>
+            {domain.title}
+          </h3>
+          <FlourishDivider />
+          <SkillRows domain={domain} />
+          <Legend />
+        </>
+      )}
+    </Modal>
   );
 }

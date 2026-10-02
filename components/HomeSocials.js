@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { profile } from "@/lib/profile";
 import { Icon } from "@/components/Icons";
+import Modal from "@/components/Modal";
 
 export default function HomeSocials() {
   const { contact } = profile;
@@ -51,52 +51,42 @@ export default function HomeSocials() {
 }
 
 function ResumeModal({ open, onClose }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open, onClose]);
-
-  if (!open || typeof document === "undefined") return null;
-
-  return createPortal(
-    <div className="resume-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Resume">
-      <div className="resume-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="resume-head">
-          <div className="resume-actions">
-            <a
-              className="resume-open"
-              href="/resume.pdf"
-              download={`${profile.shortName}-Resume.pdf`}
-            >
-              Download ↓
-            </a>
-            <a
-              className="resume-open"
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open in new tab ↗
-            </a>
-          </div>
-          <button className="resume-close" onClick={onClose} aria-label="Close resume">
-            ×
-          </button>
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      label="Resume"
+      overlayClass="resume-overlay"
+      panelClass="resume-modal"
+      showClose={false}
+    >
+      <div className="resume-head">
+        <div className="resume-actions">
+          <a
+            className="resume-open"
+            href="/resume.pdf"
+            download={`${profile.shortName}-Resume.pdf`}
+          >
+            Download ↓
+          </a>
+          <a
+            className="resume-open"
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open in new tab ↗
+          </a>
         </div>
-        <iframe
-          className="resume-frame"
-          src="/resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
-          title="Resume PDF"
-        />
+        <button className="resume-close" onClick={onClose} aria-label="Close resume">
+          ×
+        </button>
       </div>
-    </div>,
-    document.body
+      <iframe
+        className="resume-frame"
+        src="/resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+        title="Resume PDF"
+      />
+    </Modal>
   );
 }

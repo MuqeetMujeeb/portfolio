@@ -5,7 +5,17 @@ import { createPortal } from "react-dom";
 
 // Shared popup: dark backdrop + parchment panel, Esc / backdrop / × to close,
 // scroll-locked, portalled to <body> so the page `zoom` doesn't shrink it.
-export default function Modal({ open, onClose, children, label }) {
+// `overlayClass` / `panelClass` let a caller restyle it (e.g. the resume viewer);
+// `showClose={false}` hides the built-in × when the caller renders its own.
+export default function Modal({
+  open,
+  onClose,
+  children,
+  label,
+  overlayClass = "sk-overlay",
+  panelClass = "panel panel-framed sk-modal",
+  showClose = true,
+}) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -22,19 +32,18 @@ export default function Modal({ open, onClose, children, label }) {
 
   return createPortal(
     <div
-      className="sk-overlay"
+      className={overlayClass}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={label}
     >
-      <div
-        className="panel panel-framed sk-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="sk-close" onClick={onClose} aria-label="Close">
-          ×
-        </button>
+      <div className={panelClass} onClick={(e) => e.stopPropagation()}>
+        {showClose && (
+          <button className="sk-close" onClick={onClose} aria-label="Close">
+            ×
+          </button>
+        )}
         {children}
       </div>
     </div>,

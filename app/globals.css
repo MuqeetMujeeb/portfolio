@@ -247,56 +247,6 @@ h2.section-title {
   }
 }
 
-/* ====================== Side navigation (dots) ================== */
-.sidenav {
-  position: fixed;
-  right: 26px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.sidenav button {
-  --d: 11px;
-  width: var(--d);
-  height: var(--d);
-  border-radius: 50%;
-  border: 1.5px solid rgba(243, 232, 207, 0.7);
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.35s ease;
-  position: relative;
-}
-.sidenav button::after {
-  content: attr(data-label);
-  position: absolute;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-title);
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--parch-100);
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
-}
-.sidenav button:hover::after {
-  opacity: 1;
-}
-.sidenav button.active {
-  background: var(--gold-200);
-  border-color: var(--gold-100);
-  box-shadow: 0 0 14px rgba(231, 201, 122, 0.8);
-  transform: scale(1.25);
-}
-
 /* ====================== TOP NAVBAR ====================== */
 .navbar {
   position: fixed;
@@ -1434,63 +1384,7 @@ h2.section-title {
   font-family: var(--font-title);
 }
 
-/* ====================== GATE LOADER ====================== */
-.gate {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  overflow: hidden;
-  background: var(--stone-900);
-}
-.gate.opening .gate-leaf.left {
-  transform: translateX(-101%) rotateY(18deg);
-}
-.gate.opening .gate-leaf.right {
-  transform: translateX(101%) rotateY(-18deg);
-}
-.gate.gone {
-  opacity: 0;
-  pointer-events: none;
-}
-.gate-leaf {
-  position: relative;
-  width: 50%;
-  height: 100%;
-  background-image: url("/images/gate.jpg");
-  background-size: 200% 100%;
-  transition: transform 1.9s cubic-bezier(0.7, 0, 0.2, 1);
-  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
-}
-.gate-leaf.left {
-  background-position: left center;
-  border-right: 2px solid rgba(0, 0, 0, 0.6);
-}
-.gate-leaf.right {
-  background-position: right center;
-}
-.gate-glow {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  transform: translateX(-50%);
-  z-index: 2;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    var(--gold-100),
-    var(--gold-200),
-    transparent
-  );
-  box-shadow: 0 0 40px 12px rgba(231, 201, 122, 0.6);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-.gate.opening .gate-glow {
-  opacity: 1;
-}
+/* ====================== GATE LOADER (intro text) ====================== */
 .gate-enter {
   position: absolute;
   z-index: 5;
@@ -1500,10 +1394,6 @@ h2.section-title {
   text-align: center;
   color: var(--parch-100);
   transition: opacity 0.6s ease;
-}
-.gate.opening .gate-enter {
-  opacity: 0;
-  pointer-events: none;
 }
 .gate-crest {
   font-family: var(--font-display);
@@ -1826,14 +1716,6 @@ h2.section-title {
   background: linear-gradient(180deg, var(--ink-700), var(--ink-900));
   border-bottom: 1px solid var(--gold-400);
 }
-.resume-title {
-  font-family: var(--font-title);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  color: var(--parch-100);
-}
 .resume-actions {
   display: flex;
   align-items: center;
@@ -1968,7 +1850,6 @@ h2.section-title {
   .skills-grid,
   .projects-grid { grid-template-columns: 1fr; }
   .about-meta { grid-template-columns: 1fr; }
-  .sidenav { right: 12px; }
   .about-grid { margin-left: 0; }
   .ribbon-nav { display: none; } /* no side room on phones — use the tabs */
   .connect-links { grid-template-columns: minmax(0, 360px); }
@@ -1976,6 +1857,5 @@ h2.section-title {
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1 !important; transform: none !important; }
-  .gate-leaf { transition-duration: 0.8s; }
   * { animation-duration: 0.001ms !important; }
 }

@@ -16,6 +16,16 @@ export default function Navbar({ onSummon }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [switching, setSwitching] = useState(false);
+
+  // Slide the toggle to "Professional", then load that edition (a full page
+  // load: the editions use separate root layouts).
+  function toProfessional(e) {
+    e.preventDefault();
+    setSwitching(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => { window.location.href = "/"; }, reduce ? 0 : 420);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -45,10 +55,18 @@ export default function Navbar({ onSummon }) {
           ))}
         </nav>
 
-        {/* Switch to the professional edition (a plain link: the editions use
-            separate root layouts, so this is a full page load) */}
-        <a className="edition-switch" href="/">
-          Professional edition
+        {/* Edition toggle: thumb sits on Medieval; clicking slides it across */}
+        <a
+          className="edition-toggle"
+          href="/"
+          role="switch"
+          aria-checked={switching}
+          aria-label="Professional edition"
+          onClick={toProfessional}
+        >
+          <span className="thumb" aria-hidden="true" />
+          <span className="opt med">Medieval</span>
+          <span className="opt pro">Professional</span>
         </a>
 
         {/* Interactive CTA — summons the AI herald

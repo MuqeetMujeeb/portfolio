@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { profile } from "@/lib/profile";
 import { Icon } from "@/components/Icons";
+import Knight from "@/components/Knight";
 
 const SUGGESTIONS = [
   "What does Muqeet do?",
@@ -80,19 +81,22 @@ export default function Chatbot({ open, onOpen, onClose }) {
     }
   }
 
-  if (!open) {
-    return (
-      <button
-        className="chat-fab"
-        onClick={onOpen}
-        aria-label="Open chat with Muqeet's AI assistant"
-      >
-        <Icon.chat />
-      </button>
-    );
-  }
+  // The knight replaces the old round chat button and stays visible while the
+  // chat is open; it "thinks" while busy and cheers on each new reply.
+  const knight = (
+    <Knight
+      open={open}
+      busy={busy}
+      replies={messages.filter((m) => m.role === "bot").length}
+      onToggle={open ? onClose : onOpen}
+    />
+  );
+
+  if (!open) return knight;
 
   return (
+    <>
+    {knight}
     <div className="chat-window" role="dialog" aria-label="Chat with Muqeet's AI assistant">
       <div className="chat-header">
         <div className="seal">{profile.shortName[0]}</div>
@@ -143,5 +147,6 @@ export default function Chatbot({ open, onOpen, onClose }) {
         </button>
       </div>
     </div>
+    </>
   );
 }

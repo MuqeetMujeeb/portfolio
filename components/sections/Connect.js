@@ -1,5 +1,6 @@
 import { profile } from "@/lib/profile";
 import { FlourishDivider, Icon } from "@/components/Icons";
+import CommentScroll from "@/components/CommentScroll";
 
 export default function Connect() {
   const { contact } = profile;
@@ -87,6 +88,7 @@ export default function Connect() {
               );
             })}
           </div>
+          <CommentScroll />
           <p className="connect-foot reveal">
             {profile.name} · {profile.title} · {profile.location}
           </p>

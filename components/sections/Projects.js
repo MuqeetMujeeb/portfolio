@@ -8,18 +8,13 @@ import Modal from "@/components/Modal";
 export default function Projects() {
   const [open, setOpen] = useState(null); // selected project object
 
-  const columns = [
-    {
-      title: "SMARTnCODE Technologies",
-      items: profile.projects.filter(
-        (p) => p.context === "SMARTnCODE Technologies"
-      ),
-    },
-    {
-      title: "Personal Projects",
-      items: profile.projects.filter((p) => p.context === "Personal Project"),
-    },
-  ];
+  // One column per context (employer, then personal), in profile order, so new
+  // projects in lib/profile.js show up without touching this component.
+  const contexts = [...new Set(profile.projects.map((p) => p.context))];
+  const columns = contexts.map((ctx) => ({
+    title: ctx === "Personal Project" ? "Personal Projects" : ctx,
+    items: profile.projects.filter((p) => p.context === ctx),
+  }));
 
   return (
     <section id="projects" className="section" data-nav="Projects">

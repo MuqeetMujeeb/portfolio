@@ -1,37 +1,15 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildSystemPrompt, profile } from "@/lib/profile";
+import { createRateLimiter, clientIp } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
 const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-// Best-effort per-IP rate limit, kept in memory. On serverless each warm
-// instance has its own map, so this caps abuse rather than enforcing a hard
-// global quota — swap for a shared store (e.g. Upstash Redis) if ever needed.
-const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 8;
-const hits = new Map(); // ip -> timestamps within the window
-
-function rateLimited(ip) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  // keep the map from growing unbounded
-  if (hits.size > 5000) {
-    for (const [k, v] of hits) {
-      if (!v.length || now - v[v.length - 1] >= WINDOW_MS) hits.delete(k);
-    }
-  }
-  return recent.length > MAX_PER_WINDOW;
-}
+const rateLimited = createRateLimiter({ windowMs: 60_000, max: 8 });
 
 export async function POST(req) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
-  if (rateLimited(ip)) {
+  if (rateLimited(clientIp(req))) {
     return Response.json(
       {
         error:
@@ -96,7 +74,7 @@ export async function POST(req) {
     return Response.json(
       {
         error:
-          "My connection to the archives faltered. Please try again, or email " +
+          "I couldn't reach the assistant just now. Please try again, or email " +
           profile.contact.email +
           ".",
       },

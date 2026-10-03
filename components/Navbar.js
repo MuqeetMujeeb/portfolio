@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Skills" },
-  { href: "/projects", label: "Projects" },
-  { href: "/connect", label: "Connect" },
+  { href: "/classic", label: "Home" },
+  { href: "/classic/about", label: "About" },
+  { href: "/classic/skills", label: "Skills" },
+  { href: "/classic/projects", label: "Projects" },
+  { href: "/classic/connect", label: "Connect" },
 ];
 
 export default function Navbar({ onSummon }) {
@@ -25,7 +25,7 @@ export default function Navbar({ onSummon }) {
   }, []);
 
   const isActive = (href) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/classic" ? pathname === "/classic" : pathname.startsWith(href);
 
   return (
     <header className={`navbar ${scrolled ? "is-scrolled" : ""}`}>
@@ -44,6 +44,12 @@ export default function Navbar({ onSummon }) {
             </Link>
           ))}
         </nav>
+
+        {/* Switch to the professional edition (a plain link: the editions use
+            separate root layouts, so this is a full page load) */}
+        <a className="edition-switch" href="/">
+          Professional edition
+        </a>
 
         {/* Interactive CTA — summons the AI herald
         <button className="nav-summon" onClick={onSummon}>
@@ -88,6 +94,9 @@ export default function Navbar({ onSummon }) {
         >
           Ask the Herald
         </button>
+        <a className="nav-overlay-link" href="/">
+          Professional edition
+        </a>
       </div>
     </header>
   );

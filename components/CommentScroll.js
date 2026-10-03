@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { FlourishDivider } from "@/components/Icons";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -49,6 +50,7 @@ export default function CommentScroll() {
     <form className={`comment-scroll reveal${state === "sent" ? " sent" : ""}`} noValidate onSubmit={submit}>
       <div className="cs-head">
         <h3>Love the profile? Leave a comment.</h3>
+        <FlourishDivider className="divider cs-divider" />
         <p>Tell me what stood out, or simply say hail. I&apos;ll reply to your email.</p>
       </div>
       <div className="cs-fields">
@@ -63,7 +65,7 @@ export default function CommentScroll() {
         <label className="cs-field">
           <span>Comment</span>
           <textarea
-            ref={msgRef} name="comment" rows={3} maxLength={1000} placeholder="What did you think?" required
+            ref={msgRef} name="comment" rows={4} maxLength={1000} placeholder="What did you think?" required
             value={comment} aria-invalid={err.field === "comment" || undefined}
             onChange={(e) => { setComment(e.target.value); setErr({ field: null, text: "" }); }}
           />

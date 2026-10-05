@@ -91,6 +91,10 @@ export default function Connect() {
           <CommentScroll />
           <p className="connect-foot reveal">
             {profile.name} · {profile.title} · {profile.location}
+            <span className="pal-credit">
+              Knight sprite by{" "}
+              <a href="https://xzany.itch.io/free-knight-2d-pixel-art" target="_blank" rel="noopener noreferrer">Mattz Art</a>
+            </span>
           </p>
         </div>
       </div>

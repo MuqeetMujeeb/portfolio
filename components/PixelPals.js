@@ -9,39 +9,27 @@ import { usePathname } from "next/navigation";
    the cursor near the bottom of the screen, naps when left alone, and the two
    stop for a pet (with hearts) when they meet. Other components can make the
    knight react with:
-     window.dispatchEvent(new CustomEvent("knight", { detail: { say, mood } }))  */
+     window.dispatchEvent(new CustomEvent("knight", { detail: { say, mood } }))
+   Knight sprite: "FREE - Knight 2D Pixel Art" by Mattz Art (xzany.itch.io),
+   used under its licence (public/pixel/knight/LICENSE.txt).  */
 
-const PAL = {
-  K: "#1a1410", S: "#e3e6ea", s: "#9aa0a8", d: "#5c626b", V: "#0e0a06", Y: "#f2d27a",
-  R: "#a3303d", G: "#e0b450", B: "#5a3a1e", W: "#f2f4f7",
-  k: "#3a2414", O: "#e39b4a", o: "#b56a2a", w: "#f3e8cf", e: "#1a1410", p: "#e8a0a8",
-};
+const PAL = { k: "#3a2414", O: "#e39b4a", o: "#b56a2a", w: "#f3e8cf", e: "#1a1410", p: "#e8a0a8" };
 
-// Knight: head rows 0–9, body rows 10–19 (drawn separately so it can bow).
-const K_HEAD = [
-  "....RRR............",
-  "...RRRRRKKKK.......",
-  "..RR..KKSSSSK......",
-  ".....KSSSSSSSK.....",
-  ".....KSSSSSSSK.....",
-  ".....KVVVVVVVK.W...",
-  ".....KVVYVVYVK.W...",
-  ".....KsVVVVVVK.W...",
-  ".....KssdsdssK.W...",
-  "......KKKKKKK..W...",
-];
-const K_BODY_TOP = [
-  ".....KRRRRRRRK.W...",
-  "....KsRRGGRRRsKW...",
-  "....KsRGGGGRRsKW...",
-  "....KsRRGGRRRsKW...",
-  "....KdRRGGRRRdGGG..",
-  ".....KGGGGGGGK.B...",
-];
-const K_LEGS = {
-  stand: [".....KssK.KssK.....", ".....KssK.KssK.....", ".....KddK.KddK.....", "....KBBBK.KBBBK...."],
-  stride: ["....KssK..KssK.....", "....KssK..KssK.....", "...KddK....KddK....", "..KBBBK....KBBBK..."],
+// Knight sprite sheets: horizontal strips of 96x84 cells, facing right, feet on
+// row 61 in every frame. Each cell is cropped to 72x52 around the knight
+// (x 8–80, y 12–64) and drawn at 2x.
+const SHEETS = {
+  idle: { src: "/pixel/knight/idle.png", n: 7, fps: 8 },
+  walk: { src: "/pixel/knight/walk.png", n: 8, fps: 10 },
+  run: { src: "/pixel/knight/run.png", n: 8, fps: 14 },
+  defend: { src: "/pixel/knight/defend.png", n: 6, fps: 8 },
+  jump: { src: "/pixel/knight/jump.png", n: 5, fps: 10, once: true },
+  attack: { src: "/pixel/knight/attack.png", n: 6, fps: 12, once: true },
 };
+const CELL_W = 96, CROP = { x: 8, y: 12, w: 72, h: 52 }, KSCALE = 2;
+// on-screen knight box, and where his body sits inside it (for the cat and hearts)
+const KW = CROP.w * KSCALE, KH = CROP.h * KSCALE, BODY_L = 40, BODY_R = 104;
+
 const CAT = {
   walkA: [".k.........k.k..", "kOk.......kOkOk.", "kOk.......kOOOk.", ".kOk.....kOeOeOk", "..kOkkkkkkOOpOOk", "...kOOOOOOOOOkk.", "...kOOOwwwOOOk..", "...kOoOkkkOoOk..", "...kOkk...kOk...", "...kk......kk..."],
   walkB: [".k.........k.k..", "kOk.......kOkOk.", "kOk.......kOOOk.", ".kOk.....kOeOeOk", "..kOkkkkkkOOpOOk", "...kOOOOOOOOOkk.", "...kOOOwwwOOOk..", "...kOoOkkkOoOk..", "....kOk..kOk....", "....kk...kk....."],
@@ -49,8 +37,8 @@ const CAT = {
 };
 CAT.sleep = CAT.sit.map((r) => r.replace(/e/g, "k"));
 
-const KS = 4, CS = 3;            // pixel scale for knight / cat
-const KW = 19 * KS, KH = 20 * KS, CW = 16 * CS, CH = 10 * CS;
+const CS = 3;                    // pixel scale for the cat
+const CW = 16 * CS, CH = 10 * CS;
 
 const HINTS = {
   "/classic": "Hail, traveller! I guard Muqeet's keep. Click me to ask about his work.",
@@ -77,12 +65,10 @@ function paint(canvas, facingLeft, fn) {
   if (facingLeft) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
   fn(ctx);
 }
-function drawKnight(canvas, pose, facingLeft) {
+function drawKnight(canvas, img, frame, facingLeft) {
   paint(canvas, facingLeft, (ctx) => {
-    const bow = pose === "bow" ? 1 : 0;
-    drawRows(ctx, K_HEAD, KS, bow, bow * 2);
-    drawRows(ctx, K_BODY_TOP, KS, 0, 10);
-    drawRows(ctx, pose === "stride" ? K_LEGS.stride : K_LEGS.stand, KS, 0, 16);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, frame * CELL_W + CROP.x, CROP.y, CROP.w, CROP.h, 0, 0, KW, KH);
   });
 }
 function drawCat(canvas, frame, facingLeft) {
@@ -139,7 +125,7 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
   // Cheer when a new Herald reply arrives.
   const lastReplies = useRef(replies);
   useEffect(() => {
-    if (replies > lastReplies.current && st.current) st.current.k.cheer = 0.7;
+    if (replies > lastReplies.current && st.current) st.current.k.once = "jump";
     lastReplies.current = replies;
   }, [replies]);
   useEffect(() => { if (open) setBubble(""); }, [open]);
@@ -148,7 +134,7 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
   useEffect(() => {
     const onKnight = (e) => {
       const { say: text, mood } = e.detail || {};
-      if (mood && st.current) { st.current.k.cheer = 0.8; const k = st.current.k; hearts(k.x + KW / 2, KH, 4); }
+      if (mood && st.current) { const k = st.current.k; k.once = "jump"; hearts(k.x + KW / 2, KH - 10, 4); }
       if (text) say(text);
     };
     window.addEventListener("knight", onKnight);
@@ -160,25 +146,27 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
     const reduce = reduceMotion();
     const W = () => window.innerWidth;
     const s = (st.current = {
-      k: { x: W() - KW - 40, dir: -1, mode: "idle", t: 2, target: 0, pose: "", cheer: 0, petCool: 6, bow: 0 },
-      c: { x: W() - KW - 110, dir: -1, mode: "follow", t: 0, frame: "", sitFor: 0, hop: 0 },
+      k: { x: W() - KW - 20, dir: -1, mode: "idle", t: 2, target: 0, fast: false, drawn: "", anim: "idle", f: 0, once: null, petCool: 6 },
+      c: { x: W() - KW - 110, dir: -1, mode: "sit", t: 0, frame: "", sitFor: 0, hop: 0, v: 0, moving: false, phase: 0 },
       pointer: { x: 0, y: 0, at: -1e9 },
     });
+    const imgs = {};
+    Object.entries(SHEETS).forEach(([name, sh]) => { const im = new Image(); im.src = sh.src; im.onload = () => { s.k.drawn = ""; render(); }; imgs[name] = im; });
     const onMove = (e) => { s.pointer = { x: e.clientX, y: e.clientY, at: performance.now() }; };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    let raf = 0, last = performance.now(), anim = 0;
+    let raf = 0, last = performance.now();
     const render = () => {
       const { k, c } = s;
-      const kJump = k.cheer > 0 ? Math.abs(Math.sin(k.cheer * 9)) * 10 : 0;
-      kBtn.current.style.transform = `translate(${k.x.toFixed(1)}px, ${(-kJump).toFixed(1)}px)`;
+      kBtn.current.style.transform = `translate(${Math.round(k.x)}px, 0)`;
       const cJump = c.hop > 0 ? Math.sin((c.hop / 0.5) * Math.PI) * 22 : 0;
-      cBtn.current.style.transform = `translate(${c.x.toFixed(1)}px, ${(-cJump).toFixed(1)}px)`;
-      const kPose = k.bow > 0 ? "bow" : k.mode === "walk" && Math.floor(anim * 6) % 2 ? "stride" : "stand";
-      const kKey = kPose + k.dir;
-      if (kKey !== k.pose) { drawKnight(kCan.current, kPose, k.dir < 0); k.pose = kKey; }
+      cBtn.current.style.transform = `translate(${Math.round(c.x)}px, ${-Math.round(cJump)}px)`;
+      const sheet = SHEETS[k.anim], img = imgs[k.anim];
+      const kFrame = Math.min(sheet.n - 1, Math.floor(k.f));
+      const kKey = `${k.anim}${kFrame}${k.dir}`;
+      if (kKey !== k.drawn && img?.complete && img.naturalWidth) { drawKnight(kCan.current, img, kFrame, k.dir < 0); k.drawn = kKey; }
       const moving = c.mode === "walk" || c.mode === "run";
-      const cFrame = c.mode === "sleep" ? "sleep" : moving ? (Math.floor(anim * (c.mode === "run" ? 10 : 6)) % 2 ? "walkA" : "walkB") : "sit";
+      const cFrame = c.mode === "sleep" ? "sleep" : moving ? (Math.floor(c.phase) % 2 ? "walkA" : "walkB") : "sit";
       const cKey = cFrame + c.dir;
       if (cKey !== c.frame) { drawCat(cCan.current, cFrame, c.dir < 0); c.frame = cKey; }
       // keep the speech bubbles over their owners, inside the viewport
@@ -189,19 +177,16 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
 
     const step = (dt) => {
       const { k, c, pointer } = s, w = W(), now = performance.now();
-      anim += dt;
-      k.cheer = Math.max(0, k.cheer - dt);
-      k.bow = Math.max(0, k.bow - dt);
       c.hop = Math.max(0, c.hop - dt);
       k.petCool = Math.max(0, k.petCool - dt);
       const { open: chatOpen } = live.current;
 
       // ---- knight ----
       if (chatOpen) {               // stand guard at the right while the chat is open
-        k.target = w - KW - 30; k.mode = Math.abs(k.target - k.x) > 3 ? "walk" : "idle";
+        k.target = w - KW - 10; k.fast = true; k.mode = Math.abs(k.target - k.x) > 3 ? "walk" : "idle";
       } else if (k.mode === "idle") {
         k.t -= dt;
-        if (k.t <= 0) { k.target = 20 + Math.random() * Math.max(40, w - KW - 60); k.mode = "walk"; }
+        if (k.t <= 0) { k.target = Math.random() * Math.max(40, w - KW); k.fast = false; k.mode = "walk"; }
       } else if (k.mode === "pet") {
         k.t -= dt;
         if (k.t <= 0) { k.mode = "idle"; k.t = 2 + Math.random() * 3; k.petCool = 14; }
@@ -209,25 +194,45 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
       if (k.mode === "walk") {
         const dx = k.target - k.x;
         k.dir = dx < 0 ? -1 : 1;
-        k.x += Math.sign(dx) * Math.min(Math.abs(dx), 40 * dt);
-        if (Math.abs(dx) < 1) { k.mode = "idle"; k.t = 2.5 + Math.random() * 4; }
+        k.x += Math.sign(dx) * Math.min(Math.abs(dx), (k.fast ? 110 : 46) * dt);
+        if (Math.abs(dx) < 1) { k.mode = "idle"; k.fast = false; k.t = 2.5 + Math.random() * 4; }
       }
-      k.x = Math.max(4, Math.min(w - KW - 4, k.x));
+      k.x = Math.max(-BODY_L + 4, Math.min(w - BODY_R - 4, k.x));
+
+      // knight animation: one-shots (jump / attack) win, then thinking, moving, idle
+      const want = k.once || (k.mode === "walk" ? (k.fast ? "run" : "walk") : live.current.busy && chatOpen ? "defend" : "idle");
+      if (want !== k.anim) { k.anim = want; k.f = 0; }
+      k.f += dt * SHEETS[k.anim].fps;
+      if (SHEETS[k.anim].once) { if (k.f >= SHEETS[k.anim].n) { k.once = null; k.anim = "idle"; k.f = 0; } }
+      else k.f %= SHEETS[k.anim].n;
 
       // ---- cat ----
       const chasing = now - pointer.at < 1500 && pointer.y > window.innerHeight - 170 && !chatOpen;
       let goal, fast = false;
       if (chasing) { goal = pointer.x - CW / 2; fast = true; }
-      else goal = k.x + (k.dir < 0 ? KW + 6 : -CW - 6); // trot just behind the knight
-      const dist = goal - c.x;
-      if (c.mode === "sleep") {
-        if (Math.abs(dist) > 160 || chasing) { c.mode = "run"; c.sitFor = 0; }
-      } else if (Math.abs(dist) > (chasing ? 6 : 24)) {
-        c.mode = fast || Math.abs(dist) > 140 ? "run" : "walk";
-        c.dir = dist < 0 ? -1 : 1;
-        c.x += Math.sign(dist) * Math.min(Math.abs(dist), (c.mode === "run" ? 150 : 70) * dt);
+      else goal = k.dir < 0 ? k.x + BODY_R + 2 : k.x + BODY_L - CW - 2; // trot just behind the knight
+      const dist = goal - c.x, ad = Math.abs(dist);
+      // Separate start/stop distances so the cat doesn't flicker between
+      // sitting and walking while it keeps pace with the knight.
+      const startAt = chasing ? 14 : 34, stopAt = chasing ? 4 : 10;
+      if (k.mode === "pet") { c.moving = false; c.v = 0; }        // stay put while being petted
+      else if (c.mode === "sleep") { if (ad > 160 || chasing) c.moving = true; }
+      else if (!c.moving && ad > startAt) c.moving = true;
+      else if (c.moving && ad < stopAt) c.moving = false;
+
+      if (c.moving) {
+        // walk/run with a gap between the thresholds, and ease the speed
+        if (c.mode !== "run" && (fast || ad > 170)) c.mode = "run";
+        else if (c.mode === "run" && !fast && ad < 90) c.mode = "walk";
+        else if (c.mode !== "run") c.mode = "walk";
+        if (ad > 4) c.dir = dist < 0 ? -1 : 1;
+        const top = c.mode === "run" ? 160 : 72;
+        c.v += (top - c.v) * Math.min(1, dt * 6);
+        c.x += Math.sign(dist) * Math.min(ad, c.v * dt);
+        c.phase += dt * (c.mode === "run" ? 10 : 6);               // walk cycle only advances while moving
         c.sitFor = 0;
-      } else {
+      } else if (c.mode !== "sleep") {
+        c.v = 0;
         c.mode = "sit";
         c.sitFor += dt;
         if (c.sitFor > 9 && k.mode !== "walk") c.mode = "sleep";
@@ -235,11 +240,11 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
       c.x = Math.max(2, Math.min(w - CW - 2, c.x));
 
       // ---- they meet: the knight stops to pet the cat ----
-      const close = Math.abs((c.x + CW / 2) - (k.x + KW / 2)) < KW * 0.9;
+      const close = Math.abs((c.x + CW / 2) - (k.x + KW / 2)) < (BODY_R - BODY_L) * 1.1;
       if (close && k.mode === "idle" && !chatOpen && (c.mode === "sit" || c.mode === "sleep") && k.petCool === 0) {
         k.mode = "pet"; k.t = 2.2;
-        k.dir = c.x + CW / 2 < k.x + KW / 2 ? -1 : 1; k.pose = "";
-        c.mode = "sit"; c.sitFor = 0;
+        k.dir = c.x + CW / 2 < k.x + KW / 2 ? -1 : 1;
+        c.mode = "sit"; c.sitFor = 0; c.moving = false; c.v = 0;
         hearts(c.x + CW / 2, CH + 6, 4);
         if (Math.random() < 0.35) say("Good kitty.");
       }
@@ -252,18 +257,18 @@ export default function PixelPals({ open, busy, replies, onToggle }) {
     };
     render();
     if (!reduce) raf = requestAnimationFrame(loop);
-    const onResize = () => { s.k.x = Math.min(s.k.x, W() - KW - 4); s.c.x = Math.min(s.c.x, W() - CW - 2); render(); };
+    const onResize = () => { s.k.x = Math.min(s.k.x, W() - BODY_R - 4); s.c.x = Math.min(s.c.x, W() - CW - 2); render(); };
     window.addEventListener("resize", onResize);
     return () => { cancelAnimationFrame(raf); window.removeEventListener("pointermove", onMove); window.removeEventListener("resize", onResize); };
   }, [hearts, say]);
 
   function clickKnight() {
-    if (st.current) { st.current.k.bow = 0.5; st.current.k.pose = ""; }
+    if (st.current) st.current.k.once = "attack";
     onToggle();
   }
   function clickCat() {
     const s = st.current; if (!s) return;
-    s.c.hop = 0.5; s.c.mode = "sit"; s.c.sitFor = 0;
+    s.c.hop = 0.5; s.c.mode = "sit"; s.c.sitFor = 0; s.c.moving = false; s.c.v = 0;
     hearts(s.c.x + CW / 2, CH + 10, 3);
     setCatSays(Math.random() < 0.5 ? "Mrrp!" : "Meow!");
     setTimeout(() => setCatSays(""), 1300);

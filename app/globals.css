@@ -1639,10 +1639,13 @@ body.gate-locked .pals { display: none; }
   will-change: transform;
 }
 .pal canvas { display: block; image-rendering: pixelated; }
+.knight-pal { bottom: 0; } /* sprite has 6px of empty cell under the feet */
+.pal-credit { display: block; margin-top: 0.4rem; font-size: 0.7rem; opacity: 0.75; }
+.pal-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .pal:focus-visible { outline: 2px solid var(--gold-100); outline-offset: 3px; }
 .pal-dots {
   position: absolute;
-  top: -16px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   color: var(--gold-100);
@@ -1655,7 +1658,7 @@ body.gate-locked .pals { display: none; }
 .pal-bubble {
   position: absolute;
   left: 0;
-  bottom: 100px;
+  bottom: 104px;
   max-width: 230px;
   padding: 0.6rem 0.9rem;
   border: 1px solid var(--gold-300);

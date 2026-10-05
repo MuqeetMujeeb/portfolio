@@ -69,6 +69,12 @@ contact links. It also feeds what the assistant knows.
 To list certifications, add entries to `certifications` as
 `{ title, issuer, year, credentialId, url }`.
 
+## 🙏 Credits
+
+- Pixel knight (medieval edition): ["FREE - Knight 2D Pixel Art"](https://xzany.itch.io/free-knight-2d-pixel-art)
+  by Mattz Art — free for personal and commercial projects; not to be resold or
+  redistributed as a standalone asset (see `public/pixel/knight/LICENSE.txt`).
+
 ## 🖼️ Swapping medieval images
 
 Drop replacements in `public/images/` keeping these names:

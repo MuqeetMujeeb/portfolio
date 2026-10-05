@@ -5,17 +5,27 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Skills" },
-  { href: "/projects", label: "Projects" },
-  { href: "/connect", label: "Connect" },
+  { href: "/classic", label: "Home" },
+  { href: "/classic/about", label: "About" },
+  { href: "/classic/skills", label: "Skills" },
+  { href: "/classic/projects", label: "Projects" },
+  { href: "/classic/connect", label: "Connect" },
 ];
 
 export default function Navbar({ onSummon }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [switching, setSwitching] = useState(false);
+
+  // Slide the toggle to "Professional", then load that edition (a full page
+  // load: the editions use separate root layouts).
+  function toProfessional(e) {
+    e.preventDefault();
+    setSwitching(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => { window.location.href = "/"; }, reduce ? 0 : 420);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -25,7 +35,7 @@ export default function Navbar({ onSummon }) {
   }, []);
 
   const isActive = (href) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/classic" ? pathname === "/classic" : pathname.startsWith(href);
 
   return (
     <header className={`navbar ${scrolled ? "is-scrolled" : ""}`}>
@@ -44,6 +54,20 @@ export default function Navbar({ onSummon }) {
             </Link>
           ))}
         </nav>
+
+        {/* Edition toggle: thumb sits on Medieval; clicking slides it across */}
+        <a
+          className="edition-toggle"
+          href="/"
+          role="switch"
+          aria-checked={switching}
+          aria-label="Professional edition"
+          onClick={toProfessional}
+        >
+          <span className="thumb" aria-hidden="true" />
+          <span className="opt med">Medieval</span>
+          <span className="opt pro">Professional</span>
+        </a>
 
         {/* Interactive CTA — summons the AI herald
         <button className="nav-summon" onClick={onSummon}>
@@ -88,6 +112,9 @@ export default function Navbar({ onSummon }) {
         >
           Ask the Herald
         </button>
+        <a className="nav-overlay-link" href="/">
+          Professional edition
+        </a>
       </div>
     </header>
   );

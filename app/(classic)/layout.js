@@ -1,5 +1,5 @@
 import { Cinzel, Cinzel_Decorative, EB_Garamond } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { profile } from "@/lib/profile";
 import SiteChrome from "@/components/SiteChrome";
 import { Analytics } from "@vercel/analytics/next";

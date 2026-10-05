@@ -43,7 +43,7 @@ export default function Home() {
           <HomeSocials />
         </div>
       </div>
-      <Link href="/about" className="scroll-hint">
+      <Link href="/classic/about" className="scroll-hint">
         Begin the Tale
         <span className="chev" />
       </Link>

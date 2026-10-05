@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { profile } from "@/lib/profile";
 import { Icon } from "@/components/Icons";
+import PixelPals from "@/components/PixelPals";
 
 const SUGGESTIONS = [
   "What does Muqeet do?",
@@ -80,19 +81,21 @@ export default function Chatbot({ open, onOpen, onClose }) {
     }
   }
 
-  if (!open) {
-    return (
-      <button
-        className="chat-fab"
-        onClick={onOpen}
-        aria-label="Open chat with Muqeet's AI assistant"
-      >
-        <Icon.chat />
-      </button>
-    );
-  }
+  // The roaming pixel knight (with his cat) opens the chat; he "thinks" while
+  // busy and cheers on each new reply.
+  const knight = (
+    <PixelPals
+      open={open}
+      busy={busy}
+      replies={messages.filter((m) => m.role === "bot").length}
+      onToggle={open ? onClose : onOpen}
+    />
+  );
 
   return (
+    <>
+    {knight}
+    {open && (
     <div className="chat-window" role="dialog" aria-label="Chat with Muqeet's AI assistant">
       <div className="chat-header">
         <div className="seal">{profile.shortName[0]}</div>
@@ -143,5 +146,7 @@ export default function Chatbot({ open, onOpen, onClose }) {
         </button>
       </div>
     </div>
+    )}
+    </>
   );
 }
